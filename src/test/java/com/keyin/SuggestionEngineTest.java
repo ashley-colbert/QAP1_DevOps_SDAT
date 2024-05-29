@@ -10,7 +10,7 @@ import java.util.Map;
 public class SuggestionEngineTest {
     private SuggestionEngine suggestionEngine = new SuggestionEngine();
 
-    //Test to confirm that a common incorrectly spelled word will give a correct suggestion
+    //Test to confirm that suggestions for a common word spelled incorrectly will return the correct word
     @Test
     public void testGenerateSuggestions() throws IOException {
         suggestionEngine.loadDictionaryData(Paths.get(ClassLoader.getSystemResource("words.txt").getPath()));
@@ -31,14 +31,13 @@ public class SuggestionEngineTest {
         Assertions.assertNotNull(actualWordMap, "Word map should not be null");
     }
 
-    //A test to ensure that the suggestions produced by the generateSuggestions Stream will not exceed 10 lines.
+    //Test to ensure that the suggestions produced by the generateSuggestions Stream will not exceed 10 lines.
     @Test
     public void testGenerateSuggestionLimitTen() throws IOException {
         suggestionEngine.loadDictionaryData(Paths.get(ClassLoader.getSystemResource("words.txt").getPath()));
         String suggestions = suggestionEngine.generateSuggestions("abot");
         long suggestionCount = suggestions.lines().count();
-
-        Assertions.assertTrue(suggestionCount <= 10, "No more than 10 suggestions produced");
+        Assertions.assertTrue(suggestionCount <= 10, "No more than 10 suggestions should be produced");
+        Assertions.assertFalse(suggestionCount > 10, "No more than 10 suggestions should be produced");
     }
-
 }
